@@ -9,30 +9,32 @@ This plugin let transform a Lutece site into a Progressive Web Application.
 
 The site thus becomes installable on a mobile phone or on the user's desktop using the information from a **Manifest** file (icon, shortcut name, ...).
 
-Resource loading strategies are optimized with a **Service** Worker who exploits a local cache.
+A **Service Worker** shows an offline page when the network fails and keeps the styles, scripts and images of the site in a local cache. Pages are never cached, so nothing personal to a user is kept on the device.
 
 ## Configuration
 
-Add in the file **page_frameset.html** the following code before the end of the `head` tag so to add the **Manifest** of the webapp
+Add in the file **page_frameset.html** of the theme the following code before the end of the `head` tag. It adds the link to the **Manifest**, the theme color, the iOS tags, the styles of the plugin and the script that registers the **Service Worker**, offers the installation and announces the new versions of the site:
 ```
 
-        <!- Progressive Webapp Manifest -->
-        ${pwa_manifest_link}
+        ${pwa_head!}
     </head>
 
 ```
 
 
-Manifest attributes are customizable in the **Site Properties Management** of the **Site** menu of the Lutece's Back Office.
-
-Add in the file **page_frameset.html** the following code before the end of the `body` tag so to register the **Service Worker** of the webapp:
+Optionally, place an install button where the theme wants it, in the header or the footer for instance. It stays hidden until the browser offers the installation (Chrome, Edge, Samsung Internet), and shows a short hint on iOS instead:
 ```
 
-        <!- Service Worker registration -->
-        ${pwa_service_worker}
-    </body>
+        ${pwa_install_button!}
 
 ```
+
+
+The marks `${pwa_manifest_link}` and `${pwa_service_worker}` of the version 1 are kept for the existing themes: use either them or `${pwa_head}`, not both.
+
+The application is configured in the **Progressive Web App** feature of the **Site** menu of the Back Office (right `PWA_MANAGEMENT`): the settings of the manifest, the icon (one square image of at least 512 × 512 pixels generates every size and the maskable icon) and the screenshots shown by the install dialog, with a preview of the generated manifest and an installability checklist. Left empty, the start URL and the scope are the root of the site.
+
+The site must be served over HTTPS (or on localhost) for the service worker and the installation to work.
 
 
 

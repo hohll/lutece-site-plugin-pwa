@@ -39,12 +39,16 @@ import fr.paris.lutece.portal.util.mvc.xpage.MVCApplication;
 import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.util.mvc.xpage.annotations.Controller;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * This class provides a simple implementation of an XPage
  */
-@Controller( xpageName = "offline" , pageTitleI18nKey = "pwa.xpage.offline.pageTitle" , pagePathI18nKey = "pwa.xpage.offline.pagePathLabel" )
+@RequestScoped
+@Named( "pwa.xpage.offline" )
+@Controller( xpageName = "offline" , pageTitleI18nKey = "pwa.xpage.offline.pageTitle" , pagePathI18nKey = "pwa.xpage.offline.pagePathLabel", securityTokenEnabled = true )
 public class OfflineApp extends MVCApplication
 {
     private static final String TEMPLATE_XPAGE = "/skin/plugins/pwa/offline.html";

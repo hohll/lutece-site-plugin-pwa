@@ -1,0 +1,36 @@
+<#-- Offline page precached by the service worker and shown under the URL of whatever navigation failed:          -->
+<#-- base href makes the theme links resolve from the site root, and the service worker serves them from its     -->
+<#-- asset cache. The :where() rules weigh nothing, so they style the page only when the theme CSS is not cached. -->
+<@cTpl>
+<!DOCTYPE html>
+<html lang="${lang}" data-bs-theme="${((isDark!'false') == 'true')?then('dark', 'light')}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="${theme_color}">
+<base href="${base_url}">
+<title>#i18n{pwa.offline.pageTitle}<#if app_name?has_content> - ${app_name}</#if></title>
+<#if themeCSSLinks??><@themeCSSLinks /></#if>
+<style>
+.pwa-offline{min-height:100vh;max-width:32rem;margin:0 auto;padding:1rem;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+:where(body){margin:0;font-family:system-ui,sans-serif;line-height:1.5;background:${background_color};color:#212529}
+:where(.pwa-offline button){font:inherit;padding:.6rem 1.4rem;border:0;border-radius:.4rem;background:${theme_color};color:#fff;cursor:pointer}
+:where(.pwa-offline button:focus-visible){outline:3px solid #212529;outline-offset:2px}
+</style>
+</head>
+<body>
+<@cBlock type='main' class='pwa-offline'>
+    <@cIcon name='wifi-off' class='d-block display-3 text-body-secondary mb-3' />
+    <@cTitle level=1 class='h3 mb-3'>#i18n{pwa.offline.pageTitle}</@cTitle>
+    <@cText class='lead mb-4'>#i18n{pwa.offline.title}</@cText>
+    <@cBtn label='#i18n{pwa.offline.retry}' class='primary' type='button' id='pwa-offline-retry'>
+        <@cIcon name='refresh' class='me-1' />
+    </@cBtn>
+</@cBlock>
+<script>
+document.getElementById('pwa-offline-retry').addEventListener('click', () => window.location.reload());
+window.addEventListener('online', () => window.location.reload());
+</script>
+</body>
+</html>
+</@cTpl>

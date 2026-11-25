@@ -17,32 +17,40 @@
                      using the information from a <b>Manifest</b> file (icon, shortcut name, ...).
                  </p>
                  <p>
-                     Resource loading strategies are optimized with a <b>Service</b> Worker who
-                     exploits a local cache.
+                     A <b>Service Worker</b> shows an offline page when the network fails and keeps the styles, scripts
+                     and images of the site in a local cache. Pages are never cached, so nothing personal to a user is kept on the device.
                 </p>
             </subsection>
             <subsection name="Configuration">
                 <p>
-                    Add in the file <b>page_frameset.html</b> the following code before the end of the <code> head </code> tag so
-                    to add the <b>Manifest</b> of the webapp
+                    Add in the file <b>page_frameset.html</b> of the theme the following code before the end of the <code>head</code> tag.
+                    It adds the link to the <b>Manifest</b>, the theme color, the iOS tags, the styles of the plugin and the script that
+                    registers the <b>Service Worker</b>, offers the installation and announces the new versions of the site:
 <pre>
-        &lt;!- Progressive Webapp Manifest --&gt;
-        ${pwa_manifest_link}
+        ${pwa_head!}
     &lt;/head&gt;
 </pre>
                 </p>
                 <p>
-                    Manifest attributes are customizable in the <b>Site Properties Management</b> of the <b>Site</b> menu of the Lutece's Back Office.                </p>
-                <p>
-                    Add in the file <b>page_frameset.html</b> the following code before the end of the <code> body </code> tag so
-                    to register the <b>Service Worker</b> of the webapp:
+                    Optionally, place an install button where the theme wants it, in the header or the footer for instance. It stays
+                    hidden until the browser offers the installation (Chrome, Edge, Samsung Internet), and shows a short hint on iOS instead:
 <pre>
-        &lt;!- Service Worker registration --&gt;
-        ${pwa_service_worker}
-    &lt;/body&gt;
+        ${pwa_install_button!}
 </pre>
                 </p>
-                
+                <p>
+                    The marks <code>${pwa_manifest_link}</code> and <code>${pwa_service_worker}</code> of the version 1 are kept for the
+                    existing themes: use either them or <code>${pwa_head}</code>, not both.
+                </p>
+                <p>
+                    The application is configured in the <b>Progressive Web App</b> feature of the <b>Site</b> menu of the Back Office
+                    (right <code>PWA_MANAGEMENT</code>): the settings of the manifest, the icon (one square image of at least 512 × 512 pixels
+                    generates every size and the maskable icon) and the screenshots shown by the install dialog, with a preview of the
+                    generated manifest and an installability checklist. Left empty, the start URL and the scope are the root of the site.
+                </p>
+                <p>
+                    The site must be served over HTTPS (or on localhost) for the service worker and the installation to work.
+                </p>
             </subsection>
         </section>
     </body>

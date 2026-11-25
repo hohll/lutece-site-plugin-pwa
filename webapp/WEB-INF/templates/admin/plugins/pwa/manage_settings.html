@@ -1,0 +1,69 @@
+<#include "/admin/plugins/pwa/pwa_tabs.html" />
+<#macro textField key type='text'>
+	<@formGroup labelFor=key labelKey='#i18n{${key}}' helpKey='#i18n{${key}.help}'>
+		<@input type=type name=key id=key value=(settings[key]!'') />
+	</@formGroup>
+</#macro>
+<#assign pageTitle><span class="avatar avatar-sm bg-cyan-lt me-2" aria-hidden="true"><@icon style='device-mobile' /></span>#i18n{pwa.manage_settings.pageTitle}</#assign>
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title=pageTitle description='#i18n{pwa.manage_settings.description}' />
+		<@pwaTabs active='settings'>
+			<@messages errors=errors![] infos=infos![] warnings=warnings![] />
+			<@row>
+				<@columns lg=7>
+					<@tform name='modify_settings' id='modify_settings' action='jsp/admin/plugins/pwa/ManagePwa.jsp' boxed=true>
+						<@textField key='pwa.site_property.01.name' />
+						<@textField key='pwa.site_property.02.short_name' />
+						<@textField key='pwa.site_property.03.description' type='textarea' />
+						<@textField key='pwa.site_property.06.start.url' />
+						<@textField key='pwa.site_property.07.scope' />
+						<@formGroup labelFor='pwa.site_property.04.display' labelKey='#i18n{pwa.site_property.04.display}' helpKey='#i18n{pwa.site_property.04.display.help}'>
+							<@select name='pwa.site_property.04.display' id='pwa.site_property.04.display' items=display_values default_value=(settings['pwa.site_property.04.display']!'standalone') />
+						</@formGroup>
+						<@formGroup labelFor='pwa.site_property.05.orientation' labelKey='#i18n{pwa.site_property.05.orientation}' helpKey='#i18n{pwa.site_property.05.orientation.help}'>
+							<@select name='pwa.site_property.05.orientation' id='pwa.site_property.05.orientation' items=orientation_values default_value=(settings['pwa.site_property.05.orientation']!'') />
+						</@formGroup>
+						<@textField key='pwa.site_property.10.background.color' />
+						<@textField key='pwa.site_property.11.theme.color' />
+						<@textField key='pwa.site_property.12.categories' />
+						<@formGroup>
+							<@button type='submit' name='action_modifySettings' buttonIcon='device-floppy' title='#i18n{portal.admin.message.buttonValidate}' color='primary' />
+						</@formGroup>
+					</@tform>
+				</@columns>
+				<@columns lg=5>
+					<@box>
+						<@boxHeader title='#i18n{pwa.manage_settings.checklist.title}' />
+						<@boxBody>
+							<@unstyledList>
+								<#list checklist as item>
+									<#if item.status == 'ok'>
+										<#assign checkIcon = 'circle-check' />
+										<#assign checkClass = 'text-success me-2' />
+									<#elseif item.status == 'warning'>
+										<#assign checkIcon = 'alert-triangle' />
+										<#assign checkClass = 'text-warning me-2' />
+									<#else>
+										<#assign checkIcon = 'circle-x' />
+										<#assign checkClass = 'text-danger me-2' />
+									</#if>
+									<@li class='d-flex align-items-start mb-2'>
+										<@icon style=checkIcon class=checkClass />
+										<span>#i18n{${item.messageKey}}</span>
+									</@li>
+								</#list>
+							</@unstyledList>
+						</@boxBody>
+					</@box>
+					<@box>
+						<@boxHeader title='#i18n{pwa.manage_settings.manifest.title}' />
+						<@boxBody>
+							<pre class="mb-0 small"><code>${manifest}</code></pre>
+						</@boxBody>
+					</@box>
+				</@columns>
+			</@row>
+		</@pwaTabs>
+	</@pageColumn>
+</@pageContainer>
