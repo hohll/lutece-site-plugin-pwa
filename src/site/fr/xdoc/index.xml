@@ -23,27 +23,34 @@
             </subsection>
             <subsection name="Configuration">
                 <p>
-                    Rajouter dans le fichier <b>page_frameset.html</b> le code suivant avant la fin de la balise <code>head</code> afin
-                    d'ajouter le <b>Manifest</b> de la webapp :
+                    Rajouter dans le fichier <b>page_frameset.html</b> du thème le code suivant avant la fin de la balise <code>head</code>.
+                    Il ajoute le lien vers le <b>Manifest</b>, la couleur du thème, les balises iOS, les styles du plugin et le script qui
+                    enregistre le <b>Service Worker</b>, propose l'installation et annonce les nouvelles versions du site :
 <pre>
-        &lt;!- Progressive Webapp Manifest --&gt;
-        ${pwa_manifest_link}
+        ${pwa_head!}
     &lt;/head&gt;
 </pre>
                 </p>
                 <p>
-                    Les attributs du Manifest sont paramétrables dans la <b>Gestion des propriétés du site</b> du menu <b>Site</b> du Back Office de Lutece.
-                </p>
-                <p>
-                    Rajouter dans le fichier <b>page_frameset.html</b> le code suivant avant la fin de la balise <code>body</code> afin
-                    d'enregistrer le <b>Service Worker</b> de la webapp :
+                    En option, placer un bouton d'installation là où le thème le souhaite, dans l'en-tête ou le pied de page par exemple. Il reste
+                    caché tant que le navigateur ne propose pas l'installation (Chrome, Edge, Samsung Internet), et affiche une courte aide sur iOS à la place :
 <pre>
-        &lt;!- Service Worker registration --&gt;
-        ${pwa_service_worker}
-    &lt;/body&gt;
+        ${pwa_install_button!}
 </pre>
                 </p>
-                
+                <p>
+                    Les marqueurs <code>${pwa_manifest_link}</code> et <code>${pwa_service_worker}</code> de la version 1 sont conservés pour les
+                    thèmes existants : utiliser soit eux, soit <code>${pwa_head}</code>, pas les deux.
+                </p>
+                <p>
+                    L'application se paramètre dans la fonctionnalité <b>Progressive Web App</b> du menu <b>Site</b> du Back Office
+                    (droit <code>PWA_MANAGEMENT</code>) : les paramètres du manifeste, l'icône (une image carrée d'au moins 512 × 512 pixels
+                    génère toutes les tailles et l'icône adaptable) et les captures d'écran de la fenêtre d'installation, avec un aperçu du
+                    manifeste généré et une liste de contrôle de l'installabilité. Laissés vides, l'URL de démarrage et le périmètre sont la racine du site.
+                </p>
+                <p>
+                    Le site doit être servi en HTTPS (ou sur localhost) pour que le service worker et l'installation fonctionnent.
+                </p>
             </subsection>
         </section>
     </body>

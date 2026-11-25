@@ -37,22 +37,23 @@ package fr.paris.lutece.plugins.pwa.web;
 
 import fr.paris.lutece.portal.service.content.PageData;
 import fr.paris.lutece.portal.service.includes.PageInclude;
+import fr.paris.lutece.portal.service.template.HtmlMarkup;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * ServiceWorkerInclude
  */
 public class ServiceWorkerInclude implements PageInclude {
       private static final String MARK_INCLUDE = "pwa_service_worker";
-      private static final String LINK = "<script src=\"js/plugins/pwa/sw-registration.js\"></script>";
+      private static final String LINK = "<script src=\"themes/shared/plugins/pwa/js/sw-registration.js\"></script>";
 
       /**
        * {@inheritDoc }
        */
       @Override
       public void fillTemplate(Map<String, Object> rootModel, PageData data, int nMode, HttpServletRequest request) {
-            rootModel.put(MARK_INCLUDE, LINK );
+            rootModel.put(MARK_INCLUDE, HtmlMarkup.of( LINK ) );
       }
 
 }

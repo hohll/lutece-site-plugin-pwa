@@ -1,0 +1,12 @@
+<link rel="manifest" href="servlet/plugins/pwa/ManifestServlet">
+<#if theme_color?has_content>
+<meta name="theme-color" content="${theme_color}">
+</#if>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<#if app_title?has_content>
+<meta name="apple-mobile-web-app-title" content="${app_title}">
+</#if>
+<link rel="apple-touch-icon" href="${touch_icon}">
+<link rel="stylesheet" href="themes/shared/plugins/pwa/css/pwa.css">
+<script src="themes/shared/plugins/pwa/js/sw-registration.js" defer data-update-message="#i18n{pwa.update.message}" data-update-reload="#i18n{pwa.update.reload}"></script>

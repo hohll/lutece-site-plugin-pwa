@@ -1,0 +1,12 @@
+<#macro pwaTabs active>
+<@tabs keepState=false>
+	<@tabList>
+		<@tabLink active=(active == 'settings') href='jsp/admin/plugins/pwa/ManagePwa.jsp?view=manageSettings' title='#i18n{pwa.manage_settings.tab}' tabIcon='settings' />
+		<@tabLink active=(active == 'icon') href='jsp/admin/plugins/pwa/ManagePwa.jsp?view=modifyIcon' title='#i18n{pwa.modify_icon.tab}' tabIcon='photo' />
+		<@tabLink active=(active == 'screenshots') href='jsp/admin/plugins/pwa/ManagePwa.jsp?view=manageScreenshots' title='#i18n{pwa.manage_screenshots.tab}' tabIcon='device-mobile' />
+	</@tabList>
+	<@tabContent>
+		<#nested>
+	</@tabContent>
+</@tabs>
+</#macro>

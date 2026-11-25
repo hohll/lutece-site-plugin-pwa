@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2018, Mairie de Paris
+ * Copyright (c) 2002-2026, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,45 +35,46 @@
 package fr.paris.lutece.plugins.pwa.web;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import fr.paris.lutece.plugins.pwa.service.ManifestBuilder;
+import fr.paris.lutece.plugins.pwa.service.PwaImageService;
+import fr.paris.lutece.portal.service.datastore.DatastoreService;
+import fr.paris.lutece.portal.service.i18n.I18nService;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import fr.paris.lutece.portal.service.template.AppTemplateService;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.util.html.HtmlTemplate;
+/**
+ * Serves the web app manifest built from the PWA site properties
+ */
+public class ManifestServlet extends HttpServlet
+{
+    private static final long serialVersionUID = 1L;
+    private static final String CONTENT_TYPE = "application/manifest+json;charset=UTF-8";
 
-public class ManifestServlet extends HttpServlet {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws IOException
+    {
+        PwaImageService imageService = CDI.current( ).select( PwaImageService.class ).get( );
+        String strContextPath = request.getContextPath( );
+        String strManifest = ManifestBuilder.build( strContextPath, I18nService.getDefaultLocale( ).toLanguageTag( ),
+                strKey -> DatastoreService.getDataValue( strKey, null ), imageService.getManifestIcons( strContextPath ),
+                imageService.getManifestScreenshots( strContextPath ) );
 
-	private static final long serialVersionUID = 1L;
-	private static final String TEMPLATE_JSON = "/skin/plugins/pwa/manifest.json";
-	private static final String CONTENT_TYPE = "application/manifest+json";
+        response.setContentType( CONTENT_TYPE );
+        response.getWriter( ).write( strManifest );
+    }
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-
-		res.setContentType(CONTENT_TYPE);
-		Map<String, Object> model = new HashMap<>();
-
-		HtmlTemplate template = AppTemplateService.getTemplate(TEMPLATE_JSON, req.getLocale(), model);
-
-		res.getWriter().write(template.getHtml());
-
-	}
-
-	public void init(ServletConfig config) throws ServletException {
-		AppLogService.info("MANIFEST SERVLET INIT");
-	}
-
-	public String getServletInfo() {
-		return "This servlet delivers the manifest.webmanifest file";
-	}
-
-	public void destroy() {
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getServletInfo( )
+    {
+        return "This servlet delivers the web app manifest";
+    }
 }

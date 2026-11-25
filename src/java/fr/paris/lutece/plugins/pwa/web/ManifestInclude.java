@@ -36,10 +36,11 @@ package fr.paris.lutece.plugins.pwa.web;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.portal.service.content.PageData;
 import fr.paris.lutece.portal.service.includes.PageInclude;
+import fr.paris.lutece.portal.service.template.HtmlMarkup;
 
 public class ManifestInclude implements PageInclude {
 
@@ -51,6 +52,6 @@ public class ManifestInclude implements PageInclude {
        */
       @Override
       public void fillTemplate(Map<String, Object> rootModel, PageData data, int nMode, HttpServletRequest request) {
-            rootModel.put(MARK_INCLUDE, LINK );
+            rootModel.put(MARK_INCLUDE, HtmlMarkup.of( LINK ) );
       }
 }

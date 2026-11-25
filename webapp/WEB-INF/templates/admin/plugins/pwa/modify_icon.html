@@ -1,0 +1,51 @@
+<#include "/admin/plugins/pwa/pwa_tabs.html" />
+<#assign pageTitle><span class="avatar avatar-sm bg-cyan-lt me-2" aria-hidden="true"><@icon style='device-mobile' /></span>#i18n{pwa.modify_icon.pageTitle}</#assign>
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title=pageTitle description='#i18n{pwa.modify_icon.description}'>
+			<#if custom_icon>
+				<@aButton href='jsp/admin/plugins/pwa/ManagePwa.jsp?view=confirmResetIcon' title='#i18n{pwa.modify_icon.buttonReset}' buttonIcon='restore' color='light' hideTitle=['xs','sm','md'] />
+			</#if>
+		</@pageHeader>
+		<@pwaTabs active='icon'>
+			<@messages errors=errors![] infos=infos![] warnings=warnings![] />
+			<@row>
+				<@columns lg=6>
+					<@tform name='modify_icon' id='modify_icon' action='jsp/admin/plugins/pwa/ManagePwa.jsp' enctype='multipart/form-data' boxed=true>
+						<@formGroup labelFor='icon_file' labelKey='#i18n{pwa.modify_icon.labelFile}' helpKey='#i18n{pwa.modify_icon.labelFile.help}' mandatory=true>
+							<@input type='file' name='icon_file' id='icon_file' accept='image/png,image/jpeg' mandatory=true />
+						</@formGroup>
+						<@formGroup labelKey='#i18n{pwa.modify_icon.labelBackground}' helpKey='#i18n{pwa.modify_icon.labelBackground.help}'>
+							<@p class='form-control-plaintext'><@icon style='palette' class='me-1' /> ${background_color}</@p>
+						</@formGroup>
+						<@formGroup>
+							<@button type='submit' name='action_modifyIcon' buttonIcon='upload' title='#i18n{pwa.modify_icon.buttonUpload}' color='primary' />
+						</@formGroup>
+					</@tform>
+				</@columns>
+				<@columns lg=6>
+					<@box>
+						<@boxHeader title=custom_icon?then( '#i18n{pwa.modify_icon.currentCustom}', '#i18n{pwa.modify_icon.currentBundled}' ) />
+						<@boxBody>
+							<@row class='align-items-end g-3'>
+								<#list icons as size, url>
+									<#if size == 'maskable'>
+										<#assign iconLabel = '#i18n{pwa.modify_icon.labelMaskable}' />
+										<#assign iconClass = 'rounded-circle border' />
+									<#else>
+										<#assign iconLabel = size + ' × ' + size />
+										<#assign iconClass = 'border' />
+									</#if>
+									<@columns class='col-auto text-center'>
+										<@img url=url alt=iconLabel class=iconClass params={"width": "96", "height": "96"} />
+										<@p class='small text-secondary mt-1 mb-0'>${iconLabel}</@p>
+									</@columns>
+								</#list>
+							</@row>
+						</@boxBody>
+					</@box>
+				</@columns>
+			</@row>
+		</@pwaTabs>
+	</@pageColumn>
+</@pageContainer>

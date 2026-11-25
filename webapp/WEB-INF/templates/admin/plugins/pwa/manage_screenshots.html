@@ -1,0 +1,49 @@
+<#include "/admin/plugins/pwa/pwa_tabs.html" />
+<#assign pageTitle><span class="avatar avatar-sm bg-cyan-lt me-2" aria-hidden="true"><@icon style='device-mobile' /></span>#i18n{pwa.manage_screenshots.pageTitle}</#assign>
+<@pageContainer>
+	<@pageColumn>
+		<@pageHeader title=pageTitle description='#i18n{pwa.manage_screenshots.description}'>
+			<#if screenshots?size lt max_screenshots>
+				<@button type='button' title='#i18n{pwa.manage_screenshots.buttonAdd}' buttonIcon='plus' color='primary' hideTitle=['xs','sm','md'] params={"data-bs-toggle": "modal", "data-bs-target": "#addScreenshotModal"} />
+			</#if>
+		</@pageHeader>
+		<@pwaTabs active='screenshots'>
+			<@messages errors=errors![] infos=infos![] warnings=warnings![] />
+			<@modal id='addScreenshotModal'>
+				<@modalHeader modalTitle='#i18n{pwa.manage_screenshots.buttonAdd}' />
+				<@modalBody>
+					<@tform name='add_screenshot' id='add_screenshot' action='jsp/admin/plugins/pwa/ManagePwa.jsp' enctype='multipart/form-data'>
+						<@formGroup labelFor='screenshot_file' labelKey='#i18n{pwa.manage_screenshots.labelFile}' helpKey='#i18n{pwa.manage_screenshots.labelFile.help}' mandatory=true>
+							<@input type='file' name='screenshot_file' id='screenshot_file' accept='image/png,image/jpeg' mandatory=true />
+						</@formGroup>
+						<@formGroup labelFor='screenshot_label' labelKey='#i18n{pwa.manage_screenshots.labelLabel}' helpKey='#i18n{pwa.manage_screenshots.labelLabel.help}'>
+							<@input type='text' name='screenshot_label' id='screenshot_label' />
+						</@formGroup>
+					</@tform>
+				</@modalBody>
+				<@modalFooter>
+					<@button type='button' title='#i18n{portal.util.labelCancel}' color='light' params={"data-bs-dismiss": "modal"} />
+					<@button type='submit' formId='add_screenshot' name='action_addScreenshot' buttonIcon='upload' title='#i18n{pwa.manage_screenshots.buttonUpload}' color='primary' />
+				</@modalFooter>
+			</@modal>
+			<#if screenshots?has_content>
+				<@row class='g-3'>
+					<#list screenshots as screenshot>
+						<@columns md=6 lg=screenshot.wide?then(6, 3)>
+							<@div class='img-labeled position-relative'>
+								<@img url=screenshot.url alt=screenshot.label!'' class='img-fluid border rounded' />
+								<#if screenshot.label?has_content><@span class='img-label img-label-top-start'>${screenshot.label}</@span></#if>
+								<@span class='img-label img-label-bottom-start'>${screenshot.width?c} × ${screenshot.height?c} — <#if screenshot.wide>#i18n{pwa.manage_screenshots.wide}<#else>#i18n{pwa.manage_screenshots.narrow}</#if></@span>
+								<@aButton href='jsp/admin/plugins/pwa/ManagePwa.jsp?view=confirmRemoveScreenshot&file_key=${screenshot.fileKey?url("UTF-8")}' title='#i18n{portal.util.labelDelete}' buttonIcon='trash' color='danger' size='sm' class='position-absolute top-0 end-0 m-2' hideTitle=['all'] />
+							</@div>
+						</@columns>
+					</#list>
+				</@row>
+			<#else>
+				<@card>
+					<@empty title='#i18n{pwa.manage_screenshots.empty}' subtitle='#i18n{pwa.manage_screenshots.empty.help}' iconName='photo-off' />
+				</@card>
+			</#if>
+		</@pwaTabs>
+	</@pageColumn>
+</@pageContainer>
